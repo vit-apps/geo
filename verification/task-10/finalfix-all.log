@@ -1,0 +1,32 @@
+# cmd: npm test
+# started: 2026-10-12T17:54:02Z
+
+> geo-game@0.0.0 test
+> vitest run
+
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ✓ src/smoke.test.ts (1 test) 1ms
+ ✓ src/engine/types.test.ts (1 test) 1ms
+ ✓ src/engine/scoring.test.ts (3 tests) 1ms
+ ✓ src/engine/scheduler.test.ts (5 tests) 2ms
+ ✓ src/engine/session.test.ts (6 tests) 3ms
+(node:24444) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/engine/persistence.test.ts (5 tests) 1ms
+ ✓ src/i18n/i18n.test.ts (3 tests) 3ms
+ ✓ src/ui/MapRenderer.test.tsx (3 tests) 23ms
+(node:24449) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/ui/screens/Play.test.tsx (2 tests) 29ms
+ ✓ src/data/mapIndex.test.ts (4 tests) 217ms
+ ✓ src/App.test.tsx (1 test) 21ms
+
+ Test Files  11 passed (11)
+      Tests  34 passed (34)
+   Start at  20:54:03
+   Duration  1.18s (transform 474ms, setup 868ms, collect 1.17s, tests 301ms, environment 4.61s, prepare 934ms)
+
+EXIT=0
+# finished: 2026-10-12T17:54:04Z

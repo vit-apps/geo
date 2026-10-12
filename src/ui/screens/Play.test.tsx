@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest'
+import { describe, it, expect, beforeAll, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Play } from './Play'
 import { initI18n } from '../../i18n'
@@ -13,6 +13,7 @@ const map: GameMap = {
 }
 
 beforeAll(async () => { await initI18n('en') })
+afterEach(() => { vi.useRealTimers() })
 
 describe('Play screen', () => {
   it('shows a prompt and reacts to a tap', () => {
@@ -23,5 +24,20 @@ describe('Play screen', () => {
     const hit = document.querySelector('[data-hit-id="a"]')!
     fireEvent.click(hit)
     expect(screen.getByTestId('score-hud').textContent).toBeTruthy()
+  })
+
+  it('double-tap within the feedback window only counts one answer', () => {
+    vi.useFakeTimers()
+    render(<Play map={map} level={{ id: 'beginner', nameKey: 'level.beginner', regionIds: () => ['a', 'b'] }} scoring="no-fail" onExit={() => {}} />)
+    const hitA = document.querySelector('[data-hit-id="a"]')!
+    const hitB = document.querySelector('[data-hit-id="b"]')!
+    // first tap — processed
+    fireEvent.click(hitA)
+    // second tap immediately (within 650ms feedback window) — must be ignored
+    fireEvent.click(hitB)
+    // score-hud should show asked=1, not asked=2
+    const hudText = screen.getByTestId('score-hud').textContent ?? ''
+    // HUD renders "correct/asked", so the denominator is the asked count
+    expect(hudText).toMatch(/\/1/)
   })
 })

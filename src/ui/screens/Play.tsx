@@ -23,12 +23,14 @@ export function Play({ map, level, scoring, onExit }: PlayProps) {
     })
   }
   const session = sessionRef.current
+  const processingRef = useRef(false)
   const [prompt, setPrompt] = useState<Prompt | null>(() => session.nextPrompt())
   const [visuals, setVisuals] = useState<Record<string, RegionVisual>>({})
   const [score, setScore] = useState<ScoreState>(() => session.score())
 
   function handleTap(regionId: string) {
-    if (!prompt) return
+    if (processingRef.current || !prompt) return
+    processingRef.current = true
     const result = session.submitAnswer(regionId)
     const next: Record<string, RegionVisual> = {}
     if (result.correct) next[regionId] = 'correct'
@@ -36,6 +38,7 @@ export function Play({ map, level, scoring, onExit }: PlayProps) {
     setVisuals(next)
     setScore(session.score())
     setTimeout(() => {
+      processingRef.current = false
       setVisuals({})
       if (session.isComplete()) { onExit(session.score(), session.mastery()); return }
       setPrompt(session.nextPrompt())
