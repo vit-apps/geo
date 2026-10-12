@@ -1,0 +1,56 @@
+# cmd: bash -c node .claude/skills/add-language/check-locale.mjs src/i18n/en.json src/i18n/he.json; echo exit=$?
+# started: 2026-10-12T17:35:50Z
+MISSING 225 keys in src/i18n/he.json:
+region.242
+region.834
+region.732
+region.124
+region.840
+region.398
+region.860
+region.598
+region.360
+region.032
+region.152
+region.180
+region.706
+region.404
+region.729
+region.148
+region.332
+region.214
+region.643
+region.044
+region.238
+region.578
+region.304
+region.260
+region.626
+region.710
+region.426
+region.484
+region.858
+region.076
+region.068
+region.604
+region.170
+region.591
+region.188
+region.558
+region.340
+region.222
+region.320
+region.084
+region.862
+region.328
+region.740
+region.250
+region.218
+region.630
+region.388
+region.192
+region.716
+region.072
+exit=1
+EXIT=0
+# finished: 2026-10-12T17:35:51Z

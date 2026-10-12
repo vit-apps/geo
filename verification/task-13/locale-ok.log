@@ -1,0 +1,5 @@
+# cmd: bash -c cp src/i18n/en.json /tmp/full-locale.json && node .claude/skills/add-language/check-locale.mjs src/i18n/en.json /tmp/full-locale.json
+# started: 2026-10-12T17:35:46Z
+OK: /tmp/full-locale.json covers all 248 keys
+EXIT=0
+# finished: 2026-10-12T17:35:46Z
