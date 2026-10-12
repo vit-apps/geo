@@ -1,0 +1,14 @@
+# cmd: npx vitest run src/data/mapIndex.test.ts
+# started: 2026-10-12T17:10:07Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ✓ src/data/mapIndex.test.ts (4 tests) 141ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  20:10:08
+   Duration  1.09s (transform 65ms, setup 136ms, collect 27ms, tests 141ms, environment 492ms, prepare 61ms)
+
+EXIT=0
+# finished: 2026-10-12T17:10:09Z

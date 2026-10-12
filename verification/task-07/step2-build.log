@@ -1,0 +1,9 @@
+# cmd: npm run build:maps
+# started: 2026-10-12T17:09:57Z
+
+> geo-game@0.0.0 build:maps
+> node scripts/build-maps.mjs
+
+maps built: 225 region names
+EXIT=0
+# finished: 2026-10-12T17:09:58Z
