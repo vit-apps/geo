@@ -1,0 +1,5 @@
+# cmd: node -e const e=require('./src/i18n/en.json'); console.log('has undefined key:', 'region.undefined' in e, 'keys:', Object.keys(e).length)
+# started: 2026-10-12T17:14:44Z
+has undefined key: false keys: 225
+EXIT=0
+# finished: 2026-10-12T17:14:44Z

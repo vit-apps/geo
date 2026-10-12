@@ -32,3 +32,15 @@ The brief's verbatim script was modified in one way:
 - World-map filter added `.filter((f) => f.id != null)` to skip 3 features (N. Cyprus, Somaliland, Kosovo) that have no ISO numeric id in the atlas.
 - Without this fix, `String(undefined)` produces the string `'undefined'`, causing 3 duplicate region ids and the data test would fail.
 - Europe/Middle-East are unaffected since their filter `filterSet.has(String(f.id))` would already exclude `'undefined'`.
+
+## Fix Rows (post-review cleanup)
+
+| Step | Evidence | Expected | Actual | Result |
+|------|----------|----------|--------|--------|
+| fix1-enjson | fix1-enjson.log | region.undefined absent, keys=225 | has undefined key: false, keys: 225 | PASS |
+| fix1-datatest | fix1-datatest.log | 4/4 pass | 4/4 pass | PASS |
+
+Fixes applied:
+1. Removed stale `"region.undefined": "Kosovo"` key from src/i18n/en.json (left from pre-fix build run).
+2. Removed unused `geoBounds` from d3-geo import in scripts/build-maps.mjs.
+Maps rebuilt; en.json now has 225 keys matching the 225 region names printed by the build.

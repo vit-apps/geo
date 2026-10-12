@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { feature } from 'topojson-client'
-import { geoMercator, geoPath, geoAlbersUsa, geoBounds } from 'd3-geo'
+import { geoMercator, geoPath, geoAlbersUsa } from 'd3-geo'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
