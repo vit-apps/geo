@@ -38,7 +38,8 @@ export function createSession(cfg: SessionConfig, nowFn: () => number = Date.now
       return current
     },
     submitAnswer(tappedRegionId: string): AnswerResult {
-      const expected = current!.regionId
+      if (current === null) throw new Error('submitAnswer called before nextPrompt')
+      const expected = current.regionId
       const result = judge(expected, tappedRegionId)
       store[expected] = updateMastery(store[expected], result.correct, nowFn())
       scorer.onAnswer(result.correct)
@@ -52,6 +53,8 @@ export function createSession(cfg: SessionConfig, nowFn: () => number = Date.now
       }
     },
     isComplete,
-    mastery() { return { ...store } },
+    mastery() {
+      return Object.fromEntries(Object.entries(store).map(([k, v]) => [k, { ...v }]))
+    },
   }
 }

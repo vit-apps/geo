@@ -1,0 +1,15 @@
+# cmd: npx vitest run src/engine/session.test.ts src/engine/scoring.test.ts
+# started: 2026-10-12T17:03:33Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ✓ src/engine/scoring.test.ts (3 tests) 1ms
+ ✓ src/engine/session.test.ts (6 tests) 3ms
+
+ Test Files  2 passed (2)
+      Tests  9 passed (9)
+   Start at  20:03:34
+   Duration  1.13s (transform 49ms, setup 273ms, collect 87ms, tests 4ms, environment 1.26s, prepare 129ms)
+
+EXIT=0
+# finished: 2026-10-12T17:03:35Z
