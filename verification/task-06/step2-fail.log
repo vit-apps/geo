@@ -1,0 +1,36 @@
+# cmd: npx vitest run src/engine/persistence.test.ts
+# started: 2026-10-12T17:05:32Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ❯ src/engine/persistence.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/engine/persistence.test.ts [ src/engine/persistence.test.ts ]
+Error: Failed to resolve import "./persistence" from "src/engine/persistence.test.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/i048709/work/training/geo-game/src/engine/persistence.test.ts:5:7
+  8  |    saveSettings,
+  9  |    __setStorage
+  10 |  } from "./persistence";
+     |          ^
+  11 |  class FakeStorage {
+  12 |    m = /* @__PURE__ */ new Map();
+ ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23
+ ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7
+ ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  20:05:32
+   Duration  995ms (transform 19ms, setup 111ms, collect 0ms, tests 0ms, environment 572ms, prepare 67ms)
+
+EXIT=1
+# finished: 2026-10-12T17:05:33Z

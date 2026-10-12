@@ -1,0 +1,16 @@
+# cmd: npx vitest run src/engine/persistence.test.ts
+# started: 2026-10-12T17:05:44Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+(node:82481) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/engine/persistence.test.ts (5 tests) 2ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  20:05:45
+   Duration  1.05s (transform 31ms, setup 139ms, collect 56ms, tests 2ms, environment 532ms, prepare 53ms)
+
+EXIT=0
+# finished: 2026-10-12T17:05:46Z
