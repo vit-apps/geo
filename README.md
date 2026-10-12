@@ -6,14 +6,16 @@ A geography-learning PWA for mastering world and regional maps through adaptive,
 
 GeoMap is a client-only, offline-capable PWA that teaches geography through interactive games. Players select a map and difficulty level, then play through carefully adapted drills that focus on regions they haven't yet mastered. The app uses spaced-repetition scheduling and adaptive difficulty to help learners from first-graders through experts progress to fluency.
 
-**Key features:**
-- Installable as a PWA; works offline after first load
-- Four preloaded maps: World, Europe, Middle East, North America + US states
-- Three scoring modes: no-fail learning, lives, timer/best time
-- Adaptive spaced-repetition scheduler
-- Difficulty levels (beginner → expert)
-- Full internationalization: English + Hebrew with RTL support
-- Built on React + Vite + TypeScript
+**Key features (all implemented):**
+- [x] Installable as a PWA; works offline after first load
+- [x] Four preloaded maps: World, Europe, Middle East, North America + US states
+- [x] Three scoring modes: no-fail learning, lives, timer/best time
+- [x] Adaptive spaced-repetition scheduler
+- [x] Difficulty levels (beginner → expert)
+- [x] Full internationalization: English + Hebrew with RTL support
+- [x] Skill-driven development layer: add-map, add-region, add-game-mode, add-language
+- [x] GitHub Pages CI/CD via `.github/workflows/deploy.yml`
+- [x] Built on React + Vite + TypeScript
 
 ## Running locally
 
@@ -63,7 +65,24 @@ The app is designed to be deployed on GitHub Pages. The build process uses a `BA
 BASE_PATH=/geo-game npm run build
 ```
 
-The GitHub Pages deployment happens automatically via CI/CD in a later task.
+The GitHub Pages deployment happens automatically via CI/CD via `.github/workflows/deploy.yml`.
+
+## Verification Protocol
+
+Every task ships a `verification/task-NN/SUMMARY.md` that records each command step's expected and
+actual result, and its PASS/FAIL verdict. Steps are captured with the harness:
+
+```bash
+scripts/verify.sh <task-label> <step-label> -- <command>
+```
+
+The script writes a timestamped log to `verification/<task-label>/<step-label>.log` and appends
+`EXIT=<code>` at the end. The SUMMARY cites each log and records the verdict.
+
+Task 14 aggregates all summaries into `verification/FINAL-REPORT.md`.
+
+**Rule:** never mark a step PASS if the command exited non-zero, unless the expected result is
+non-zero (TDD red-phase steps). Honesty over green.
 
 ## Architecture
 

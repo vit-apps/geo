@@ -1,0 +1,12 @@
+# cmd: bash -c for d in verification/task-*; do test -f "$d/SUMMARY.md" || echo "MISSING SUMMARY: $d"; grep -q 'FAIL' "$d/SUMMARY.md" && echo "HAS FAIL: $d"; done; echo "aggregation check done"
+# started: 2026-10-12T17:47:56Z
+HAS FAIL: verification/task-03
+HAS FAIL: verification/task-04
+HAS FAIL: verification/task-08
+HAS FAIL: verification/task-09
+HAS FAIL: verification/task-10
+HAS FAIL: verification/task-12
+HAS FAIL: verification/task-14
+aggregation check done
+EXIT=0
+# finished: 2026-10-12T17:47:56Z
