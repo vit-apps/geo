@@ -1,0 +1,30 @@
+# cmd: npm run build
+# started: 2026-10-12T17:24:50Z
+
+> geo-game@0.0.0 build
+> tsc -b && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 74 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/registerSW.js                       0.13 kB
+dist/manifest.webmanifest                0.30 kB
+dist/index.html                          0.55 kB │ gzip:  0.33 kB
+dist/assets/index-B1JjK3Ga.css           0.42 kB │ gzip:  0.24 kB
+dist/assets/middle-east-B1jJ1Mnl.js      9.63 kB │ gzip:  4.13 kB
+dist/assets/europe-CdBYCVyR.js          22.60 kB │ gzip:  9.05 kB
+dist/assets/world-ZC4FGBCv.js          191.67 kB │ gzip: 75.65 kB
+dist/assets/index-CmE8-olg.js          212.41 kB │ gzip: 68.43 kB
+dist/assets/north-america-zev9tlWQ.js  227.47 kB │ gzip: 93.50 kB
+✓ built in 434ms
+
+PWA v1.3.0
+mode      generateSW
+precache  13 entries (649.59 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+EXIT=0
+# finished: 2026-10-12T17:24:58Z

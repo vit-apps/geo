@@ -1,0 +1,16 @@
+# cmd: npx vitest run src/App.test.tsx
+# started: 2026-10-12T17:24:14Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+(node:560) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ src/App.test.tsx (1 test) 22ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  20:24:15
+   Duration  809ms (transform 55ms, setup 54ms, collect 134ms, tests 22ms, environment 316ms, prepare 44ms)
+
+EXIT=0
+# finished: 2026-10-12T17:24:16Z

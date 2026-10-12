@@ -1,0 +1,14 @@
+# cmd: npx vitest run src/ui/screens/Play.test.tsx
+# started: 2026-10-12T17:22:32Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ✓ src/ui/screens/Play.test.tsx (1 test) 19ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  20:22:33
+   Duration  1.12s (transform 55ms, setup 68ms, collect 174ms, tests 19ms, environment 308ms, prepare 47ms)
+
+EXIT=0
+# finished: 2026-10-12T17:22:34Z

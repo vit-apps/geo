@@ -1,0 +1,36 @@
+# cmd: npx vitest run src/ui/screens/Play.test.tsx
+# started: 2026-10-12T17:22:18Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ❯ src/ui/screens/Play.test.tsx (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ui/screens/Play.test.tsx [ src/ui/screens/Play.test.tsx ]
+Error: Failed to resolve import "./Play" from "src/ui/screens/Play.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/i048709/work/training/geo-game/src/ui/screens/Play.test.tsx:3:21
+  2  |  import { describe, it, expect, beforeAll } from "vitest";
+  3  |  import { render, screen, fireEvent } from "@testing-library/react";
+  4  |  import { Play } from "./Play";
+     |                        ^
+  5  |  import { initI18n } from "../../i18n";
+  6  |  const map = {
+ ❯ TransformPluginContext._formatError node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23
+ ❯ node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7
+ ❯ PluginContainer.transform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  20:22:19
+   Duration  1.04s (transform 18ms, setup 140ms, collect 0ms, tests 0ms, environment 593ms, prepare 61ms)
+
+EXIT=1
+# finished: 2026-10-12T17:22:20Z

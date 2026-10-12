@@ -1,7 +1,28 @@
 import { initMastery, updateMastery, type MasteryStore } from './scheduler'
 
-let storage: Storage =
-  typeof localStorage !== 'undefined' ? localStorage : (undefined as unknown as Storage)
+class MemoryStorage implements Storage {
+  private m = new Map<string, string>()
+  get length() { return this.m.size }
+  key(i: number) { return [...this.m.keys()][i] ?? null }
+  getItem(k: string) { return this.m.has(k) ? this.m.get(k)! : null }
+  setItem(k: string, v: string) { this.m.set(k, v) }
+  removeItem(k: string) { this.m.delete(k) }
+  clear() { this.m.clear() }
+}
+
+function resolveStorage(): Storage {
+  if (typeof localStorage === 'undefined') return new MemoryStorage()
+  try {
+    const probe = '__geo_probe__'
+    localStorage.setItem(probe, '1')
+    localStorage.removeItem(probe)
+    return localStorage
+  } catch {
+    return new MemoryStorage()
+  }
+}
+
+let storage: Storage = resolveStorage()
 
 export function __setStorage(s: Storage) { storage = s }
 

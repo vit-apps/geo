@@ -9,6 +9,7 @@ export function dirFor(locale: string): 'ltr' | 'rtl' {
 }
 
 export async function initI18n(locale: string): Promise<void> {
+  if (i18n.isInitialized) return
   await i18n.use(initReactI18next).init({
     resources: { en: { translation: en }, he: { translation: he } },
     lng: locale,
