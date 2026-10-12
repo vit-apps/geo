@@ -1,0 +1,14 @@
+# cmd: npx vitest run src/i18n/i18n.test.ts
+# started: 2026-10-12T17:16:40Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ✓ src/i18n/i18n.test.ts (3 tests) 4ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  20:16:41
+   Duration  838ms (transform 43ms, setup 69ms, collect 186ms, tests 4ms, environment 294ms, prepare 49ms)
+
+EXIT=0
+# finished: 2026-10-12T17:16:42Z
