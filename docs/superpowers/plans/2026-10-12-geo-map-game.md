@@ -21,6 +21,29 @@
 - Stable region ids: ISO 3166-1 numeric (countries), FIPS (US states). Ids are strings.
 - Vite `base` must be configurable for GitHub Pages subpath via an env var, defaulting to `/`.
 - Commit after every passing step group. Conventional-commit messages.
+- **Verification evidence is mandatory for every step.** No step is complete, and no task is marked done, until its validation has run, its output has been captured to a file, and that output has been evaluated against the step's stated **Expected** result. See the Verification Protocol below. A step whose evidence does not match its Expected line is a failure — stop, fix, re-run, re-capture; do not proceed.
+
+## Verification Protocol
+
+Every task writes evidence into `verification/task-NN/` (created by Task 0). The rules:
+
+1. **Capture.** Any step that runs a command captures combined stdout+stderr and the exit code to a log file. Use the helper `scripts/verify.sh` (created in Task 0):
+   ```bash
+   scripts/verify.sh task-03 step2-types-fail -- npx vitest run src/engine/types.test.ts
+   ```
+   This runs the command, tees output to `verification/task-03/step2-types-fail.log`, appends a trailer line `EXIT=<code>` and an ISO timestamp, and exits with the command's own code. The `<task-NN>` and `<label>` are free-form; `--` separates them from the command.
+
+2. **Evaluate.** After capturing, compare the log against the step's **Expected** line. For a "verify it fails" step the evidence must show failure (non-zero exit or the named error); for a "verify it passes" step it must show success (`EXIT=0`, tests passed). Record the judgement — do not assume.
+
+3. **Non-command steps** (writing a file, authoring a SKILL.md) are verified by the next command step that exercises them; their evidence is that downstream log. A step that only writes a doc with no downstream command gets a one-line note in the task SUMMARY.
+
+4. **Summarize.** The last step of every task writes `verification/task-NN/SUMMARY.md`: a table of each verified step with its evidence file, the Expected result, the Actual result, and PASS/FAIL. The task is done only when every row is PASS. The SUMMARY is committed with the task.
+
+5. **Evidence is version-controlled.** `verification/` is committed (it is the audit trail), except that large or binary captures (screenshots, traces) are referenced by path and the raw file is kept but may be git-ignored if over 1 MB; note the size in the SUMMARY.
+
+6. **CI re-evaluates.** The deploy workflow (Task 11) runs the same test/build commands; a green CI run is the independent re-evaluation of the local evidence.
+
+**This protocol applies to every task, 1 through 14.** For each task: wrap each `Run:` command with `scripts/verify.sh task-NN <step-label> -- <command>` so its evidence lands in `verification/task-NN/`; after the task's final code step, add a closing step that writes `verification/task-NN/SUMMARY.md` (one row per verified step: step, evidence file, Expected, Actual, PASS/FAIL) and includes `verification/task-NN/` in that task's commit. Where a task below shows a bare `Run:` line, it is shorthand for the wrapped form. A task is not done until its SUMMARY exists and every row is PASS.
 
 ## Review Focus
 
@@ -40,7 +63,10 @@ These inputs/conditions the spec implies but that no single feature task natural
 geo-game/
   package.json, tsconfig.json, vite.config.ts, index.html
   scripts/
+    verify.sh                 # verification evidence capture helper (Task 0)
     build-maps.mjs            # acquire+convert TopoJSON -> Region[] JSON (Task 7)
+  verification/               # committed evidence: task-NN/*.log + SUMMARY.md (Task 0+)
+    FINAL-REPORT.md           # aggregate pass/fail across all tasks (Task 14)
   public/
     icons/ (pwa icons)
   src/
@@ -72,6 +98,83 @@ geo-game/
 
 ---
 
+### Task 0: Verification harness
+
+**Files:**
+- Create: `scripts/verify.sh`, `verification/.gitkeep`, `.gitignore` (append)
+- Test: self-check via Step 3.
+
+**Interfaces:**
+- Produces (used by every later task): `scripts/verify.sh <task-label> <step-label> -- <command...>` which runs the command, tees combined output to `verification/<task-label>/<step-label>.log`, appends `EXIT=<code>` and a UTC timestamp, and exits with the command's code.
+
+- [ ] **Step 1: Write the verify helper**
+
+`scripts/verify.sh`:
+```bash
+#!/usr/bin/env bash
+# Capture a command's output as verification evidence.
+# Usage: scripts/verify.sh <task-label> <step-label> -- <command...>
+set -uo pipefail
+task="${1:?task-label required}"; shift
+step="${1:?step-label required}"; shift
+[ "${1:-}" = "--" ] && shift
+dir="verification/${task}"
+mkdir -p "$dir"
+log="${dir}/${step}.log"
+{
+  echo "# cmd: $*"
+  echo "# started: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+} > "$log"
+# run, teeing combined output; preserve the command's exit code
+set -o pipefail
+"$@" > >(tee -a "$log") 2> >(tee -a "$log" >&2)
+code=$?
+{
+  echo "EXIT=${code}"
+  echo "# finished: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+} >> "$log"
+exit "$code"
+```
+
+- [ ] **Step 2: Make it executable and set up the evidence dir**
+
+```bash
+mkdir -p verification && touch verification/.gitkeep
+chmod +x scripts/verify.sh
+printf 'verification/**/*.heapsnapshot\nverification/**/*.png\nverification/**/*.json.gz\n' >> .gitignore
+```
+(Large/binary captures are ignored but referenced by path in SUMMARY files; text logs are committed.)
+
+- [ ] **Step 3: Self-check the helper**
+
+Run: `scripts/verify.sh task-00 selfcheck -- node -e "console.log('ok')"`
+Expected: prints `ok`; creates `verification/task-00/selfcheck.log` whose last content line is `EXIT=0` and which contains `ok`.
+
+Confirm:
+```bash
+grep -q 'EXIT=0' verification/task-00/selfcheck.log && grep -q '^ok' verification/task-00/selfcheck.log && echo PASS
+```
+Expected: `PASS`.
+
+- [ ] **Step 4: Write the task SUMMARY and commit**
+
+Create `verification/task-00/SUMMARY.md`:
+```markdown
+# Task 0 — Verification harness
+
+| Step | Evidence | Expected | Actual | Verdict |
+|------|----------|----------|--------|---------|
+| 3 self-check | selfcheck.log | prints ok, EXIT=0 | <fill from log> | PASS |
+```
+Fill `Actual` from the real log before committing.
+
+```bash
+git add scripts/verify.sh verification .gitignore
+git commit -m "chore: add verification evidence harness (verify.sh + verification/)"
+```
+
+---
+
 ### Task 1: Project scaffold (Vite + React + TS + Vitest)
 
 **Files:**
@@ -80,6 +183,8 @@ geo-game/
 
 **Interfaces:**
 - Produces: a runnable dev server and a passing test runner. No app interfaces yet.
+
+**Verification:** capture Steps 3 and 4 via `scripts/verify.sh task-01 ...`; close with a `verification/task-01/SUMMARY.md` (table of step → evidence → expected → actual → verdict); do not commit until all rows PASS.
 
 - [ ] **Step 1: Create the project files**
 
@@ -1997,26 +2102,46 @@ git commit -m "feat(skills): add add-game-mode and add-language development skil
 
 ---
 
-### Task 14: Final verification pass
+### Task 14: Final verification pass and evidence evaluation
 
-**Files:** none (verification only).
+**Files:** Create `verification/FINAL-REPORT.md`.
 
-- [ ] **Step 1: Full clean build and test**
+- [ ] **Step 1: Full clean build and test (captured)**
 
-Run: `rm -rf node_modules dist && npm ci && npm run build:maps && npm test && npm run build`
-Expected: install, map build, all tests, and production build all succeed.
+Run: `scripts/verify.sh task-14 clean-build -- bash -c "rm -rf node_modules dist && npm ci && npm run build:maps && npm test && npm run build"`
+Expected: install, map build, all tests, and production build all succeed; log ends `EXIT=0`.
 
-- [ ] **Step 2: Manual offline/install check via chrome-devtools**
+- [ ] **Step 2: Manual offline/install check via chrome-devtools (evidence stored)**
 
-Run `npm run preview`, open the preview URL with the chrome-devtools skill, confirm: the four maps load and are playable; a wrong answer reveals the correct region; a lives round ends at 0; Hebrew toggles `dir="rtl"` on the chrome while the map does not mirror; the app registers a service worker (installable). Record findings.
+Run `npm run preview`. Open the preview URL with the chrome-devtools skill and confirm, saving a screenshot per check into `verification/task-14/`:
+- four maps load and are playable → `maps-playable.png`
+- a wrong answer reveals the correct region → `wrong-reveal.png`
+- a lives round ends at 0 → `lives-zero.png`
+- Hebrew toggles `dir="rtl"` on chrome while the map does not mirror → `rtl-chrome.png`
+- a service worker is registered (installable) → `sw-registered.png`
 
-- [ ] **Step 3: Update README status and commit**
+For each, write one line in the SUMMARY stating Expected, Actual (what the screenshot shows), and PASS/FAIL. Screenshots are referenced by path; raw PNGs are git-ignored per the protocol, the SUMMARY is committed.
 
-Mark the implemented features in `README.md`, confirm the "add via skills" rule is documented, and commit any final doc touch-ups.
+- [ ] **Step 3: Aggregate and evaluate all evidence**
+
+Create `verification/FINAL-REPORT.md`: a table with one row per task (0–14), linking its `SUMMARY.md`, and a column for whether every row in that summary is PASS. Then state an overall verdict. If any task summary has a FAIL row, the overall verdict is FAIL — stop and fix before shipping.
+
+```bash
+# sanity: every task summary exists and contains no FAIL
+for d in verification/task-*; do
+  test -f "$d/SUMMARY.md" || echo "MISSING SUMMARY: $d"
+  grep -q 'FAIL' "$d/SUMMARY.md" && echo "HAS FAIL: $d"
+done; echo "aggregation check done"
+```
+Expected: no `MISSING SUMMARY` and no `HAS FAIL` lines.
+
+- [ ] **Step 4: Update README status and commit**
+
+Mark the implemented features in `README.md`, confirm the "add via skills" rule and the Verification Protocol are documented, and commit the final docs plus all verification evidence.
 
 ```bash
 git add -A
-git commit -m "docs: finalize README after implementation verification"
+git commit -m "docs: finalize README; add final verification report and evidence"
 ```
 
 ---
@@ -2025,4 +2150,5 @@ git commit -m "docs: finalize README after implementation verification"
 
 - **Spec coverage:** engine/UI split (T3–T10), adaptive repetition (T4), levels + scope (T7), three scoring modes (T5), four preloaded maps from open TopoJSON (T7), SVG renderer with touch hit-areas (T9), i18n + RTL en/he (T8,T10), client-only PWA on GitHub Pages (T1,T11), persistence/offline (T6,T1), skill-driven dev layer add-map/add-region/add-game-mode/add-language with acquire→generate→test→gate (T12,T13), decisions in ADRs/log (referenced in T12/T13 Document stages; ADRs already written during brainstorming).
 - **Review Focus:** empty/first-run (T4,T6 tests), small level set (T5 test), wrong-answer flooding (T5 test), tiny/overlapping tap (T9 test), missing translation key (T8 test) — each pinned to its owning task.
-- **Type consistency:** `GameMap`/`Region`/`Prompt`/`AnswerResult`/`ScoreState`/`ScoringKind`/`SessionConfig` defined once in T3 and used verbatim thereafter; `MasteryStore`/`RegionMastery` from T4 reused in T6; `createSession`/`Session` from T5 used in T10; `MapRenderer`/`RegionVisual` from T9 used in T10.
+- **Type consistency:** `GameMap`/`Region`/`Prompt`/`AnswerResult`/`ScoreState`/`ScoringKind`/`SessionConfig` defined once in T3 and used verbatim thereafter; `MasteryStore`/`RegionMastery` from T4 reused in T6; `createSession`/`Session` (incl. `mastery()`) from T5 used in T10; `MapRenderer`/`RegionVisual` from T9 used in T10.
+- **Verification evidence:** Task 0 builds the capture harness (`scripts/verify.sh`); every task (1–14) wraps its command steps with it, stores logs under `verification/task-NN/`, and closes with a committed `SUMMARY.md` evaluated against each step's Expected result; Task 14 aggregates all summaries into `verification/FINAL-REPORT.md` with an overall verdict, and CI re-runs the same commands as independent re-evaluation.
