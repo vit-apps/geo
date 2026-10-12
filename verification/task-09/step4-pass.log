@@ -1,0 +1,14 @@
+# cmd: npx vitest run src/ui/MapRenderer.test.tsx
+# started: 2026-10-12T17:19:35Z
+
+ RUN  v2.1.9 /Users/i048709/work/training/geo-game
+
+ ✓ src/ui/MapRenderer.test.tsx (3 tests) 33ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  20:19:36
+   Duration  1.28s (transform 34ms, setup 62ms, collect 613ms, tests 33ms, environment 300ms, prepare 40ms)
+
+EXIT=0
+# finished: 2026-10-12T17:19:37Z

@@ -1,0 +1,41 @@
+.region {
+  fill: #c8d9e8;
+  stroke: #6a8fa8;
+  stroke-width: 0.5;
+  cursor: pointer;
+  transition: fill 0.15s ease;
+}
+
+.region.highlighted {
+  fill: #ffd966;
+  stroke: #b8860b;
+}
+
+.region.correct {
+  fill: #6abf6a;
+  stroke: #2d8a2d;
+}
+
+.region.wrong {
+  fill: #e87070;
+  stroke: #a33030;
+}
+
+.region.revealed {
+  fill: #b0c4de;
+  stroke: #4a6a88;
+  opacity: 0.85;
+}
+
+.region.dim {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.region-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 8;
+  pointer-events: all;
+  cursor: pointer;
+}
