@@ -1,0 +1,8 @@
+# cmd: bash -c node .claude/skills/add-map/validate-map.mjs /tmp/bad-map.json; test $? -ne 0 && echo 'CORRECTLY REJECTED'
+# started: 2026-10-12T17:32:03Z
+FAIL:
+duplicate id r1
+empty path r3
+CORRECTLY REJECTED
+EXIT=0
+# finished: 2026-10-12T17:32:03Z

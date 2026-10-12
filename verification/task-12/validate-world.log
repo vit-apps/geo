@@ -1,0 +1,5 @@
+# cmd: node .claude/skills/add-map/validate-map.mjs src/data/maps/world.json
+# started: 2026-10-12T17:31:54Z
+OK: world 174 regions
+EXIT=0
+# finished: 2026-10-12T17:31:54Z
