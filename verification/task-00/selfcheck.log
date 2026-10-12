@@ -1,0 +1,5 @@
+# cmd: node -e console.log('ok')
+# started: 2026-10-12T16:44:45Z
+ok
+EXIT=0
+# finished: 2026-10-12T16:44:45Z
