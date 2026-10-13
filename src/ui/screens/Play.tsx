@@ -47,7 +47,7 @@ export function Play({ map, level, scoring, onExit }: PlayProps) {
 
   return (
     <div className="play-screen">
-      {prompt && <PromptBanner nameKey={prompt.nameKey} />}
+      {prompt && <PromptBanner nameKey={prompt.nameKey} regionId={prompt.regionId} />}
       <ScoreHud score={score} />
       <div className="map-wrap">
         <MapRenderer map={map} visuals={visuals} activeIds={regionIds} onRegionTap={handleTap} />

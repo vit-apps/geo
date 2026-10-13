@@ -11,17 +11,30 @@ export interface MapRendererProps {
 
 export function MapRenderer({ map, visuals, onRegionTap, activeIds }: MapRendererProps) {
   const activeSet = activeIds ? new Set(activeIds) : null
+
+  function handleSvgClick(e: React.MouseEvent<SVGSVGElement>) {
+    if (!onRegionTap) return
+    const target = e.target as Element
+    // Walk up to find a data-hit-id or data-region-id attribute
+    let el: Element | null = target
+    while (el && el !== e.currentTarget) {
+      const hitId = el.getAttribute('data-hit-id') ?? el.getAttribute('data-region-id')
+      if (hitId) { onRegionTap(hitId); return }
+      el = el.parentElement
+    }
+  }
+
   return (
     <svg
       viewBox={map.viewBox.join(' ')}
       className="map-renderer"
-      role="img"
+      aria-label={map.id}
       style={{ width: '100%', height: '100%', touchAction: 'manipulation' }}
+      onClick={handleSvgClick}
     >
       {map.regions.map((r) => {
         const state = visuals?.[r.id] ?? 'idle'
         const dim = activeSet && !activeSet.has(r.id) ? ' dim' : ''
-        const tap = () => onRegionTap?.(r.id)
         return (
           <g key={r.id}>
             {/* visible shape */}
@@ -31,7 +44,6 @@ export function MapRenderer({ map, visuals, onRegionTap, activeIds }: MapRendere
               d={r.svgPath}
               data-hit-id={r.id}
               className="region-hit"
-              onClick={tap}
               fill="transparent"
               stroke="transparent"
               strokeWidth={8}
