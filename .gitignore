@@ -1,8 +1,30 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# macOS
 .DS_Store
+
+# Editor directories
+.vscode/
+.idea/
+
+# Local environment files
+.env
+.env.*
+
+# Logs (global catch-all)
 *.log
+
+# Intentionally keep verification evidence logs
 !verification/**/*.log
+
+# Verification binary artifacts (not committed)
 verification/**/*.heapsnapshot
 verification/**/*.png
 verification/**/*.json.gz
